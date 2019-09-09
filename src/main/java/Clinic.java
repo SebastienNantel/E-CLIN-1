@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 
-public class Clinic {
+public class Clinic extends Hospital{
 
     private LinkedList<Patient> doctorFile = new LinkedList<Patient>();
     private LinkedList<Patient> radiologyFile = new LinkedList<Patient>();
@@ -44,16 +44,6 @@ public class Clinic {
         } else {
             doctorFile.add(patient);
         }
-    }
-
-    private int getIndexOfPatientPositionInGravityTriage(Patient patient, LinkedList<Patient> patientFile) {
-        int patientGravity = patient.getGravity();
-        for (Patient patientAlreadyInFile : patientFile) {
-            if (patientGravity > patientAlreadyInFile.getGravity()) {
-                return patientFile.indexOf(patientAlreadyInFile);
-            }
-        }
-        return -1;
     }
 
     private void radiologyFileTriageWithGravity(Patient patient) {

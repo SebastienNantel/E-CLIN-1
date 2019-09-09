@@ -82,7 +82,6 @@ public class ClinicTest {
         String patientWithEbolaName = fifoClinic.getDoctorFile().getFirst().getName();
         String doctorFilePatientWithBrokenBoneName = fifoClinic.getDoctorFile().getLast().getName();
         String radiologyFilePatientWithBrokenBoneName = fifoClinic.getRadiologyFile().getFirst().getName();
-
         assertEquals("Joe", patientWithEbolaName);
         assertEquals("Bob", doctorFilePatientWithBrokenBoneName);
         assertEquals("Bob", radiologyFilePatientWithBrokenBoneName);
@@ -192,7 +191,6 @@ public class ClinicTest {
         // Then the new patient should be in second position in the file
         String newPatientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().get(1).getName();
         String lastPatientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().getLast().getName();
-
         assertEquals("Real", newPatientName);
         assertEquals("Joe", lastPatientName);
     }
@@ -205,7 +203,6 @@ public class ClinicTest {
 
         // Then the new patient should be in first position of the file
         String patientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().getFirst().getName();
-
         assertEquals("Joe", patientName);
         assertEquals(1, fifoDoctorGravityRadiologyClinic.getRadiologyFile().size());
     }
