@@ -138,7 +138,7 @@ public class ClinicTest {
     public void shouldHave3PatientsInDoctorFileWithNewPatientInSecondPosition() {
         // Given 1 patient with gravity 7 and another patient with gravity 5 with the
         // clinic sorting by gravity
-        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 5, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 3, VisibleSymptom.FLU);
         gravityDoctorFifoRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
 
         // When sorting a new patient with a gravity of 6
@@ -182,7 +182,7 @@ public class ClinicTest {
     public void shouldHave3PatientInRadiologyFileWithNewPatientInSecondPosition() {
         // Given 1 patient with sprain with gravity 5 and another patient with
         // broken bone with gravity 7 with a clinic sorting radiology with gravity
-        fifoDoctorGravityRadiologyClinic.triagePatient("Joe", 5, VisibleSymptom.SPRAIN);
+        fifoDoctorGravityRadiologyClinic.triagePatient("Joe", 3, VisibleSymptom.SPRAIN);
         fifoDoctorGravityRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.BROKEN_BONE);
 
         // When sorting a new patient with sprain with gravity 6
@@ -253,5 +253,37 @@ public class ClinicTest {
         // Then no patient should be added to the file
         int numberOfPatientInFile = gravityClinic.getRadiologyFile().size();
         assertEquals(0, numberOfPatientInFile);
+    }
+
+    @Test
+    public void shouldAddNewPatientAtTheEndOfTheDoctorFile() {
+        // Given 1 patient with gravity 7 with flu, another patient with
+        // gravity 3 with flu in a clinic using gravity as sorting
+        // algorithm
+        gravityClinic.triagePatient("Joe", 3, VisibleSymptom.FLU);
+        gravityClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
+
+        // When sorting a new patient with gravity 4 with flu
+        gravityClinic.triagePatient("Real", 4, VisibleSymptom.FLU);
+
+        // Then the new patient should be at the end of the doctor file
+        String newPatientName = gravityClinic.getDoctorFile().getLast().getName();
+        assertEquals("Real", newPatientName);
+    }
+
+    @Test
+    public void shouldAddNewPatientAtTheEndOfTheRadiologyFile() {
+        // Given 1 patient with gravity 7 with sprain, another patient with
+        // gravity 3 with sprain in a clinic using gravity as sorting
+        // algorithm
+        gravityClinic.triagePatient("Joe", 3, VisibleSymptom.SPRAIN);
+        gravityClinic.triagePatient("Bob", 7, VisibleSymptom.SPRAIN);
+
+        // When sorting a new patient with gravity 4 with broken bone
+        gravityClinic.triagePatient("Real", 4, VisibleSymptom.BROKEN_BONE);
+
+        // Then the new patient should be at the end of the radiology file
+        String newPatientName = gravityClinic.getRadiologyFile().getLast().getName();
+        assertEquals("Real", newPatientName);
     }
 }

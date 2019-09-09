@@ -98,4 +98,20 @@ public class CommunityCenterTest {
         int numberOfPatientsInFile = gravityCommunityCenter.getNurseFile().size();
         assertEquals(0, numberOfPatientsInFile);
     }
+
+    @Test
+    public void shouldAddNewPatientAtTheEndOfNurseFile() {
+        // Given 1 patient with gravity 3 another patient with
+        // gravity 7 in a community center using gravity sorting
+        // algorithm
+        gravityCommunityCenter.triagePatient("Joe", 3);
+        gravityCommunityCenter.triagePatient("Bob", 7);
+
+        // When sorting a new patient with gravity 4
+        gravityCommunityCenter.triagePatient("Real", 4);
+
+        // Then new patient should be at the end of the nurse file
+        String newPatientName = gravityCommunityCenter.getNurseFile().getLast().getName();
+        assertEquals("Real", newPatientName);
+    }
 }
