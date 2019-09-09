@@ -19,16 +19,18 @@ public class Clinic extends Hospital{
 
     public void triagePatient(String name, int gravity, VisibleSymptom visibleSymptom) {
         Patient patient = new Patient(name, gravity, visibleSymptom);
-        if (doctorTriageType == TriageType.FIFO) {
-            doctorFileTriageWithFifo(patient);
-        } else {
-            doctorFileTriageWithGravity(patient);
-        }
-        if (isGoingInRadiology(visibleSymptom)) {
-            if (radiologyTriageType == TriageType.FIFO) {
-                radiologyFileTriageWithFifo(patient);
+        if (gravity > 1) {
+            if (doctorTriageType == TriageType.FIFO) {
+                doctorFileTriageWithFifo(patient);
             } else {
-                radiologyFileTriageWithGravity(patient);
+                doctorFileTriageWithGravity(patient);
+            }
+            if (isGoingInRadiology(visibleSymptom)) {
+                if (radiologyTriageType == TriageType.FIFO) {
+                    radiologyFileTriageWithFifo(patient);
+                } else {
+                    radiologyFileTriageWithGravity(patient);
+                }
             }
         }
     }

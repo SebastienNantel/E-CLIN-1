@@ -10,10 +10,12 @@ public class CommunityCenter extends Hospital{
 
     public void triagePatient(String name, int gravity) {
         Patient patient = new Patient(name, gravity, null);
-        if (triageType == TriageType.FIFO) {
-            fifoTriage(patient);
-        } else {
-            gravityTriage(patient);
+        if (gravity > 1) {
+            if (triageType == TriageType.FIFO) {
+                fifoTriage(patient);
+            } else {
+                gravityTriage(patient);
+            }
         }
     }
 

@@ -75,4 +75,27 @@ public class CommunityCenterTest {
         assertEquals("Joe", lastPatientName);
     }
 
+    @Test
+    public void shouldNotAddAnyPatientToFifoNurseFile() {
+        // Given an empty nurse file in a community center using fifo
+        // as the sorting algorithm
+        // When sorting a new patient with a gravity of 1
+        fifoCommunityCenter.triagePatient("Joe", 1);
+
+        // Then no new patient should be added to the nurse file
+        int numberOfPatientInFile = fifoCommunityCenter.getNurseFile().size();
+        assertEquals(0, numberOfPatientInFile);
+    }
+
+    @Test
+    public void shouldNotAddAnyPatientToGravityNurseFile() {
+        // Given an empty nurse file in a community center using
+        // gravity sorting algorithm
+        // When sorting a new patient with a gravity of 1
+        gravityCommunityCenter.triagePatient("Joe", 1);
+
+        // Then no new patient shoud be added to the nurse file
+        int numberOfPatientsInFile = gravityCommunityCenter.getNurseFile().size();
+        assertEquals(0, numberOfPatientsInFile);
+    }
 }
