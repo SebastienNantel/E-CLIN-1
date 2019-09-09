@@ -7,6 +7,8 @@ public class ClinicTest {
 
     private Clinic fifoClinic;
     private Clinic gravityClinic;
+    private Clinic fifoDoctorGravityRadiologyClinic;
+    private Clinic gravityDoctorFifoRadiologyClinic;
 
     @Before
     public void initialiseFifoClinic() {
@@ -18,6 +20,16 @@ public class ClinicTest {
         gravityClinic = new Clinic(TriageType.GRAVITY);
     }
 
+    @Before
+    public void initialiseFifoDoctorFileGravityRadiologyFile() {
+        fifoDoctorGravityRadiologyClinic = new Clinic(TriageType.FIFO, TriageType.GRAVITY);
+    }
+
+    @Before
+    public void initialiseGravityDoctorFileFifoRadiologyFile() {
+        gravityDoctorFifoRadiologyClinic = new Clinic(TriageType.GRAVITY, TriageType.FIFO);
+    }
+
     @Test
     public void shouldHave1PatientInTheDoctorFileAnd0InRadiologyFile() {
         // Given 1 patient with a migrain
@@ -27,7 +39,7 @@ public class ClinicTest {
         // Then patient is added to doctor file only and is the first
         String patientName = fifoClinic.getDoctorFile().getFirst().getName();
         assertEquals(patientName, "Joe");
-        assertEquals(fifoClinic.getRadiologyFile().size(), 0);
+        assertEquals(0, fifoClinic.getRadiologyFile().size());
     }
 
     @Test
@@ -41,8 +53,8 @@ public class ClinicTest {
         // Then the second patient should be the last patient in the doctor file
         // and the radiology file should be empty
         String secondPatientName = fifoClinic.getDoctorFile().getLast().getName();
-        assertEquals(secondPatientName, "Bob");
-        assertEquals(fifoClinic.getRadiologyFile().size(), 0);
+        assertEquals("Bob", secondPatientName);
+        assertEquals(0, fifoClinic.getRadiologyFile().size());
     }
 
     @Test
@@ -54,8 +66,8 @@ public class ClinicTest {
         // Then patient should be in the doctor file and the radiology file
         String doctorFilePatientName = fifoClinic.getDoctorFile().getFirst().getName();
         String radiologyFilePatientName = fifoClinic.getRadiologyFile().getFirst().getName();
-        assertEquals(doctorFilePatientName, "Joe");
-        assertEquals(radiologyFilePatientName, "Joe");
+        assertEquals("Joe", doctorFilePatientName);
+        assertEquals("Joe", radiologyFilePatientName);
     }
 
     @Test
@@ -71,11 +83,11 @@ public class ClinicTest {
         String doctorFilePatientWithBrokenBoneName = fifoClinic.getDoctorFile().getLast().getName();
         String radiologyFilePatientWithBrokenBoneName = fifoClinic.getRadiologyFile().getFirst().getName();
 
-        assertEquals(patientWithEbolaName, "Joe");
-        assertEquals(doctorFilePatientWithBrokenBoneName, "Bob");
-        assertEquals(radiologyFilePatientWithBrokenBoneName, "Bob");
-        assertEquals(fifoClinic.getRadiologyFile().size(), 1);
-        assertEquals(fifoClinic.getDoctorFile().size(), 2);
+        assertEquals("Joe", patientWithEbolaName);
+        assertEquals("Bob", doctorFilePatientWithBrokenBoneName);
+        assertEquals("Bob", radiologyFilePatientWithBrokenBoneName);
+        assertEquals(1, fifoClinic.getRadiologyFile().size());
+        assertEquals(2, fifoClinic.getDoctorFile().size());
     }
 
     @Test
@@ -91,21 +103,21 @@ public class ClinicTest {
         // Then doctor file should have 4 patient and radiology file should have 2
         // patient with the patient at the last position in the queue
         String lastPatientInRadiologyFileName = fifoClinic.getRadiologyFile().getLast().getName();
-        assertEquals(fifoClinic.getDoctorFile().size(), 4);
-        assertEquals(fifoClinic.getRadiologyFile().size(), 2);
-        assertEquals(lastPatientInRadiologyFileName, "Real");
+        assertEquals(4, fifoClinic.getDoctorFile().size());
+        assertEquals(2, fifoClinic.getRadiologyFile().size());
+        assertEquals("Real", lastPatientInRadiologyFileName);
     }
 
     @Test
     public void shouldHave2PatientInDoctorFileWithNewPatientInFirstPosition() {
         // Given 1 patient in the doctor file and the clinic is sorting by gravity
-        gravityClinic.triagePatient("Joe", 1, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 1, VisibleSymptom.FLU);
 
         // When sorting a new patient with a gravity of 7 with the flu
-        gravityClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
 
         // Then the new patient should be in the first position of the file
-        String firstPatientInDoctorFileName = gravityClinic.getDoctorFile().getFirst().getName();
+        String firstPatientInDoctorFileName = gravityDoctorFifoRadiologyClinic.getDoctorFile().getFirst().getName();
         assertEquals("Bob", firstPatientInDoctorFileName);
     }
 
@@ -113,13 +125,13 @@ public class ClinicTest {
     public void shouldHave2PatientInBothFileWithNewPatientInLastPositionOfRadiologyFile() {
         // Given 1 patient in the doctor file and the radiology file with the clinic sorting
         // by gravity
-        gravityClinic.triagePatient("Joe", 1, VisibleSymptom.BROKEN_BONE);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 1, VisibleSymptom.BROKEN_BONE);
 
         // When sorting a new patient with a gravity of 7 with broken bone
-        gravityClinic.triagePatient("Bob", 7, VisibleSymptom.BROKEN_BONE);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.BROKEN_BONE);
 
-        // Then the new patient should be in the last position of the radiologie file
-        String patientName = gravityClinic.getRadiologyFile().getLast().getName();
+        // Then the new patient should be in the last position of the radiology file
+        String patientName = gravityDoctorFifoRadiologyClinic.getRadiologyFile().getLast().getName();
         assertEquals("Bob", patientName);
     }
 
@@ -127,16 +139,74 @@ public class ClinicTest {
     public void shouldHave3PatientsInDoctorFileWithNewPatientInSecondPosition() {
         // Given 1 patient with gravity 7 and another patient with gravity 5 with the
         // clinic sorting by gravity
-        gravityClinic.triagePatient("Joe", 5, VisibleSymptom.FLU);
-        gravityClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 5, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.FLU);
 
         // When sorting a new patient with a gravity of 6
-        gravityClinic.triagePatient("Real", 6, VisibleSymptom.FLU);
+        gravityDoctorFifoRadiologyClinic.triagePatient("Real", 6, VisibleSymptom.FLU);
 
         // Then the new patient should be placed at the second place in the file
-        String patientName = gravityClinic.getDoctorFile().get(1).getName();
-        String lastPatientName = gravityClinic.getDoctorFile().getLast().getName();
+        String patientName = gravityDoctorFifoRadiologyClinic.getDoctorFile().get(1).getName();
+        String lastPatientName = gravityDoctorFifoRadiologyClinic.getDoctorFile().getLast().getName();
         assertEquals("Real", patientName);
         assertEquals("Joe", lastPatientName);
+    }
+
+    @Test
+    public void shouldOnlyHaveOnePatientInDoctorFile() {
+        // Given an empty doctor file
+        // When adding a new patient in a gravity sorting clinic
+        gravityDoctorFifoRadiologyClinic.triagePatient("Joe", 1, VisibleSymptom.FLU);
+
+        // The the doctor file should have one patient in the file at the first
+        // position
+        String patientName = gravityDoctorFifoRadiologyClinic.getDoctorFile().getFirst().getName();
+        assertEquals("Joe", patientName);
+    }
+
+    @Test
+    public void shouldHave2PatientInRadiologyFileWithTheNewPatientInFirstPosition() {
+        // Given 1 patient with broken bone with gravity 1 and the clinic sorting
+        // the doctor file with FIFO and the radiology sorting with gravity
+        fifoDoctorGravityRadiologyClinic.triagePatient("Joe", 1, VisibleSymptom.BROKEN_BONE);
+
+        // When sorting a new patient with gravity 7 with broken bone
+        fifoDoctorGravityRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.BROKEN_BONE);
+
+        // Then the new patient should be in first position
+        String newPatientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().getFirst().getName();
+        assertEquals("Bob", newPatientName);
+        assertEquals(2, fifoDoctorGravityRadiologyClinic.getRadiologyFile().size());
+    }
+
+    @Test
+    public void shouldHave3PatientInRadiologyFileWithNewPatientInSecondPosition() {
+        // Given 1 patient with sprain with gravity 5 and another patient with
+        // broken bone with gravity 7 with a clinic sorting radiology with gravity
+        fifoDoctorGravityRadiologyClinic.triagePatient("Joe", 5, VisibleSymptom.SPRAIN);
+        fifoDoctorGravityRadiologyClinic.triagePatient("Bob", 7, VisibleSymptom.BROKEN_BONE);
+
+        // When sorting a new patient with sprain with gravity 6
+        fifoDoctorGravityRadiologyClinic.triagePatient("Real", 6, VisibleSymptom.SPRAIN);
+
+        // Then the new patient should be in second position in the file
+        String newPatientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().get(1).getName();
+        String lastPatientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().getLast().getName();
+
+        assertEquals("Real", newPatientName);
+        assertEquals("Joe", lastPatientName);
+    }
+
+    @Test
+    public void shouldHaveOnlyOnePatientInRadiologyFile() {
+        // Given an empty radiology file
+        // When adding sorting a new patient with a gravity clinic
+        fifoDoctorGravityRadiologyClinic.triagePatient("Joe", 1, VisibleSymptom.BROKEN_BONE);
+
+        // Then the new patient should be in first position of the file
+        String patientName = fifoDoctorGravityRadiologyClinic.getRadiologyFile().getFirst().getName();
+
+        assertEquals("Joe", patientName);
+        assertEquals(1, fifoDoctorGravityRadiologyClinic.getRadiologyFile().size());
     }
 }
