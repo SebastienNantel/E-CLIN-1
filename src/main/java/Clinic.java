@@ -2,8 +2,8 @@ import java.util.LinkedList;
 
 public class Clinic extends Hospital{
 
-    private LinkedList<Patient> doctorFile = new LinkedList<Patient>();
-    private LinkedList<Patient> radiologyFile = new LinkedList<Patient>();
+    private LinkedList<Patient> doctorQueue = new LinkedList<Patient>();
+    private LinkedList<Patient> radiologyQueue = new LinkedList<Patient>();
     private TriageType doctorTriageType;
     private TriageType radiologyTriageType;
 
@@ -12,8 +12,8 @@ public class Clinic extends Hospital{
         this.radiologyTriageType = triageType;
     }
 
-    public Clinic(TriageType doctorFileTriageType, TriageType radiologyTriageType) {
-        this.doctorTriageType = doctorFileTriageType;
+    public Clinic(TriageType doctorQueueTriageType, TriageType radiologyTriageType) {
+        this.doctorTriageType = doctorQueueTriageType;
         this.radiologyTriageType = radiologyTriageType;
     }
 
@@ -21,55 +21,55 @@ public class Clinic extends Hospital{
         Patient patient = new Patient(name, gravity, visibleSymptom);
         if (gravity > 1) {
             if (doctorTriageType == TriageType.FIFO || gravity < 5) {
-                doctorFileTriageWithFifo(patient);
+                doctorQueueTriageWithFifo(patient);
             } else {
-                doctorFileTriageWithGravity(patient);
+                doctorQueueTriageWithGravity(patient);
             }
             if (isGoingInRadiology(visibleSymptom)) {
                 if (radiologyTriageType == TriageType.FIFO || gravity < 5) {
-                    radiologyFileTriageWithFifo(patient);
+                    radiologyQueueTriageWithFifo(patient);
                 } else {
-                    radiologyFileTriageWithGravity(patient);
+                    radiologyQueueTriageWithGravity(patient);
                 }
             }
         }
     }
 
-    private void doctorFileTriageWithFifo(Patient patient) {
-        doctorFile.add(patient);
+    private void doctorQueueTriageWithFifo(Patient patient) {
+        doctorQueue.add(patient);
     }
 
-    private void doctorFileTriageWithGravity(Patient patient) {
-        int indexToAddPatient =  getIndexOfPatientPositionInGravityTriage(patient, doctorFile);
+    private void doctorQueueTriageWithGravity(Patient patient) {
+        int indexToAddPatient =  getIndexOfPatientPositionInGravityTriage(patient, doctorQueue);
         if (indexToAddPatient != -1) {
-            doctorFile.add(indexToAddPatient, patient);
+            doctorQueue.add(indexToAddPatient, patient);
         } else {
-            doctorFile.add(patient);
+            doctorQueue.add(patient);
         }
     }
 
-    private void radiologyFileTriageWithGravity(Patient patient) {
-        int indexToAddToNewPatient = getIndexOfPatientPositionInGravityTriage(patient, radiologyFile);
+    private void radiologyQueueTriageWithGravity(Patient patient) {
+        int indexToAddToNewPatient = getIndexOfPatientPositionInGravityTriage(patient, radiologyQueue);
         if (indexToAddToNewPatient != -1) {
-            radiologyFile.add(indexToAddToNewPatient, patient);
+            radiologyQueue.add(indexToAddToNewPatient, patient);
         } else {
-            radiologyFile.add(patient);
+            radiologyQueue.add(patient);
         }
     }
 
-    private void radiologyFileTriageWithFifo(Patient patient) {
-            radiologyFile.add(patient);
+    private void radiologyQueueTriageWithFifo(Patient patient) {
+            radiologyQueue.add(patient);
     }
 
     private boolean isGoingInRadiology(VisibleSymptom visibleSymptom) {
         return visibleSymptom == VisibleSymptom.BROKEN_BONE || visibleSymptom == VisibleSymptom.SPRAIN;
     }
 
-    public LinkedList<Patient> getDoctorFile() {
-        return doctorFile;
+    public LinkedList<Patient> getDoctorQueue() {
+        return doctorQueue;
     }
 
-    public LinkedList<Patient> getRadiologyFile() {
-        return radiologyFile;
+    public LinkedList<Patient> getRadiologyQueue() {
+        return radiologyQueue;
     }
 }

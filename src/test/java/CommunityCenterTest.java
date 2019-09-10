@@ -18,34 +18,34 @@ public class CommunityCenterTest {
     }
 
     @Test
-    public void shouldHaveOnePatientInNurseFile() {
+    public void shouldHaveOnePatientInNurseQueue() {
         // Given 1 a community center using fifo sorting
         // When sorting a new patient
         fifoCommunityCenter.triagePatient("Joe", 2);
 
-        // Then the new patient should be the first in the file
-        String patientName = fifoCommunityCenter.getNurseFile().getFirst().getName();
+        // Then the new patient should be the first in the Queue
+        String patientName = fifoCommunityCenter.getNurseQueue().getFirst().getName();
         assertEquals("Joe", patientName);
-        assertEquals(1, fifoCommunityCenter.getNurseFile().size());
+        assertEquals(1, fifoCommunityCenter.getNurseQueue().size());
     }
 
     @Test
-    public void shouldHave2PatientInTheNurseFile() {
-        // Given 1 patient in the nurse file in the community center
+    public void shouldHave2PatientInTheNurseQueue() {
+        // Given 1 patient in the nurse Queue in the community center
         // using a fifo sorting algorithm
         fifoCommunityCenter.triagePatient("Joe", 2);
 
         // When sorting a new patient
         fifoCommunityCenter.triagePatient("Bob", 3);
 
-        // Then the new patient should be the last one in the file
-        String lastPatientName = fifoCommunityCenter.getNurseFile().getLast().getName();
+        // Then the new patient should be the last one in the Queue
+        String lastPatientName = fifoCommunityCenter.getNurseQueue().getLast().getName();
         assertEquals("Bob", lastPatientName);
-        assertEquals(2, fifoCommunityCenter.getNurseFile().size());
+        assertEquals(2, fifoCommunityCenter.getNurseQueue().size());
     }
 
     @Test
-    public void shouldHave2PatientInTheNurseFileWithNewPAtientInFirstPosition() {
+    public void shouldHave2PatientInTheNurseQueueWithNewPatientInFirstPosition() {
         // Given 1 patient with a gravity 2 in the community center
         // using a gravity sorting algorithm
         gravityCommunityCenter.triagePatient("Joe", 2);
@@ -53,13 +53,13 @@ public class CommunityCenterTest {
         // When sorting a new patient with a gravity of 7
         gravityCommunityCenter.triagePatient("Bob", 7);
 
-        // Then the new patient should be in the first position in the file
-        String firstPatientName = gravityCommunityCenter.getNurseFile().getFirst().getName();
+        // Then the new patient should be in the first position in the Queue
+        String firstPatientName = gravityCommunityCenter.getNurseQueue().getFirst().getName();
         assertEquals("Bob", firstPatientName);
     }
 
     @Test
-    public void shouldHave3PatientsInNurseFileWithNewPatientIn2Position() {
+    public void shouldHave3PatientsInNurseQueueWithNewPatientIn2Position() {
         // Given 1 patient with gravity 2 and another patient with gravity 6
         // in the community center using a gravity sorting algorithm
         gravityCommunityCenter.triagePatient("Joe", 2);
@@ -68,39 +68,39 @@ public class CommunityCenterTest {
         // When sorting a new patient with a gravity of 5
         gravityCommunityCenter.triagePatient("Real", 5);
 
-        // Then the new patient should be in second position in the file
-        String newPatientName = gravityCommunityCenter.getNurseFile().get(1).getName();
-        String lastPatientName = gravityCommunityCenter.getNurseFile().getLast().getName();
+        // Then the new patient should be in second position in the Queue
+        String newPatientName = gravityCommunityCenter.getNurseQueue().get(1).getName();
+        String lastPatientName = gravityCommunityCenter.getNurseQueue().getLast().getName();
         assertEquals("Real", newPatientName);
         assertEquals("Joe", lastPatientName);
     }
 
     @Test
-    public void shouldNotAddAnyPatientToFifoNurseFile() {
-        // Given an empty nurse file in a community center using fifo
+    public void shouldNotAddAnyPatientToFifoNurseQueue() {
+        // Given an empty nurse Queue in a community center using fifo
         // as the sorting algorithm
         // When sorting a new patient with a gravity of 1
         fifoCommunityCenter.triagePatient("Joe", 1);
 
-        // Then no new patient should be added to the nurse file
-        int numberOfPatientInFile = fifoCommunityCenter.getNurseFile().size();
-        assertEquals(0, numberOfPatientInFile);
+        // Then no new patient should be added to the nurse Queue
+        int numberOfPatientInQueue = fifoCommunityCenter.getNurseQueue().size();
+        assertEquals(0, numberOfPatientInQueue);
     }
 
     @Test
-    public void shouldNotAddAnyPatientToGravityNurseFile() {
-        // Given an empty nurse file in a community center using
+    public void shouldNotAddAnyPatientToGravityNurseQueue() {
+        // Given an empty nurse Queue in a community center using
         // gravity sorting algorithm
         // When sorting a new patient with a gravity of 1
         gravityCommunityCenter.triagePatient("Joe", 1);
 
-        // Then no new patient shoud be added to the nurse file
-        int numberOfPatientsInFile = gravityCommunityCenter.getNurseFile().size();
-        assertEquals(0, numberOfPatientsInFile);
+        // Then no new patient shoud be added to the nurse Queue
+        int numberOfPatientsInQueue = gravityCommunityCenter.getNurseQueue().size();
+        assertEquals(0, numberOfPatientsInQueue);
     }
 
     @Test
-    public void shouldAddNewPatientAtTheEndOfNurseFile() {
+    public void shouldAddNewPatientAtTheEndOfNurseQueue() {
         // Given 1 patient with gravity 3 another patient with
         // gravity 7 in a community center using gravity sorting
         // algorithm
@@ -110,8 +110,8 @@ public class CommunityCenterTest {
         // When sorting a new patient with gravity 4
         gravityCommunityCenter.triagePatient("Real", 4);
 
-        // Then new patient should be at the end of the nurse file
-        String newPatientName = gravityCommunityCenter.getNurseFile().getLast().getName();
+        // Then new patient should be at the end of the nurse Queue
+        String newPatientName = gravityCommunityCenter.getNurseQueue().getLast().getName();
         assertEquals("Real", newPatientName);
     }
 }

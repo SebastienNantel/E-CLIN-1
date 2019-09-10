@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public class CommunityCenter extends Hospital{
     private TriageType triageType;
-    private LinkedList<Patient> nurseFile = new LinkedList<Patient>();
+    private LinkedList<Patient> nurseQueue = new LinkedList<Patient>();
 
     public CommunityCenter(TriageType triageType) {
         this.triageType = triageType;
@@ -20,19 +20,19 @@ public class CommunityCenter extends Hospital{
     }
 
     private void gravityTriage(Patient patient) {
-        int indexToAddPatient = getIndexOfPatientPositionInGravityTriage(patient, nurseFile);
+        int indexToAddPatient = getIndexOfPatientPositionInGravityTriage(patient, nurseQueue);
         if (indexToAddPatient != -1) {
-            nurseFile.add(indexToAddPatient, patient);
+            nurseQueue.add(indexToAddPatient, patient);
         } else {
-            nurseFile.add(patient);
+            nurseQueue.add(patient);
         }
     }
 
     private void fifoTriage(Patient patient) {
-        nurseFile.add(patient);
+        nurseQueue.add(patient);
     }
 
-    public LinkedList<Patient> getNurseFile() {
-        return nurseFile;
+    public LinkedList<Patient> getNurseQueue() {
+        return nurseQueue;
     }
 }
