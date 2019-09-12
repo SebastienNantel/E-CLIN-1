@@ -20,4 +20,8 @@ public class Patient {
     public VisibleSymptom getVisibleSymptom() {
         return visibleSymptom;
     }
+
+    public boolean isGoingInRadiology() {
+        return visibleSymptom == VisibleSymptom.SPRAIN || visibleSymptom == VisibleSymptom.BROKEN_BONE;
+    }
 }
